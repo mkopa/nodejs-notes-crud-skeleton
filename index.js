@@ -1,3 +1,5 @@
+'use strict';
+
 const { settings } = require('./app/configs');
 const { Logger } = require('./app/setup');
 const express = require('express');

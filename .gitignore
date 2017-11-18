@@ -49,7 +49,6 @@ Thumbs.db
 .editorconfig
 typings/
 .jscsrc
-.jshintrc
 jsconfig.json
 client/dist/
 dump.rdb

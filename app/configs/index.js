@@ -1,3 +1,5 @@
+'use strict';
+
 const settings = require('./src/settings');
 const logger = require('./src/logger');
 

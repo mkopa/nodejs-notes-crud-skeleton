@@ -1,3 +1,5 @@
+'use strict';
+
 const settings = {
   environment: 'dev',
   server: {

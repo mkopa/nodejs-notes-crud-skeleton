@@ -1,3 +1,5 @@
+'use strict';
+
 const Timer = require('./Timer');
 const dateFormat = require('dateformat');
 const util = require('util');
