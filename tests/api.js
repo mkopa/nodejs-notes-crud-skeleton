@@ -1,43 +1,48 @@
 'use strict';
 
-/* global it, describe */
-
+/* global it, describe, afterEach */
 require('./setup/');
 
-describe('/GET get Pong', () => {
-  it('it should get Pong', (done) => {
-    done();
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const server = require('../index');
+
+chai.use(chaiHttp);
+
+describe('API test ping pong', () => {
+  it('/GET /v1/ping - it should get pong', (done) => {
+    chai.request(server)
+      .get('/v1/ping')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('pong').eql(true);
+        done();
+      });
   });
 });
 
+describe('API test all data is good - positive scenario', () => {
+  it('/POST /v1/notes - it should save note', (done) => {
+    const note = {
+      title: 'test title',
+      message: 'test message',
+    };
+    chai.request(server)
+      .post('/v1/notes')
+      .send(note)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('title').eql('test title');
+        res.body.should.have.property('message').eql('test message');
+        // res.body.should.have.property('create_date');
+        // res.body.should.have.property('modified_date');
+        done();
+      });
+  });
 
-describe('/POST create new Note', () => {
-  it('it should create new Note', (done) => {
-    done();
+  afterEach(() => {
+    server.close();
   });
 });
-
-describe('/GET get all Notes', () => {
-  it('it should get all Notes', (done) => {
-    done();
-  });
-});
-
-describe('/PUT update Note', () => {
-  it('it should update Note with specific id', (done) => {
-    done();
-  });
-});
-
-describe('/GET get specific Note', () => {
-  it('it should update Note with specific id', (done) => {
-    done();
-  });
-});
-
-describe('/DELETE remove specific Note', () => {
-  it('it should update Note with specific id', (done) => {
-    done();
-  });
-});
-

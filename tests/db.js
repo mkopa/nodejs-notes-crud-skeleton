@@ -1,12 +1,12 @@
 'use strict';
 
 /* global it, describe */
-
 const { Storage } = require('./../app/storage');
+const { settings } = require('../app/configs');
 const _ = require('lodash');
 
 describe('Sqlite3 test', () => {
-  const storage = new Storage('notes_test');
+  const storage = new Storage(settings.sqlite3.testTableName);
   const createDate = Date.now();
   const modifiedDate = createDate;
 
