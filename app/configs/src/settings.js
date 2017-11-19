@@ -5,6 +5,11 @@ const settings = {
   server: {
     port: 8001,
   },
+  sqlite3: {
+    dbPath: './sqlite3.db',
+    tableName: 'notes',
+    testTableName: 'notes_test',
+  },
   logDirectory: './log',
 };
 
