@@ -6,9 +6,8 @@ const settings = {
     port: 8001,
   },
   sqlite3: {
-    dbPath: './sqlite3.db',
+    dbPath: process.env.NOTES_DB_PATH ? process.env.NOTES_DB_PATH : './sqlite3_dev.db',
     tableName: 'notes',
-    testTableName: 'notes_test',
   },
   logDirectory: './log',
 };

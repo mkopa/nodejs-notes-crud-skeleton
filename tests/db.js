@@ -6,22 +6,16 @@ const { settings } = require('../app/configs');
 const _ = require('lodash');
 
 describe('Sqlite3 test', () => {
-  const storage = new Storage(settings.sqlite3.testTableName);
-  const createDate = Date.now();
-  const modifiedDate = createDate;
+  const storage = new Storage(settings.sqlite3.tableName);
 
   const testNote1 = {
     title: 'example title1',
     message: 'example message1',
-    createDate,
-    modifiedDate,
   };
 
   const testNote2 = {
     title: 'example title2',
     message: 'example message2',
-    createDate: 123,
-    modifiedDate: 456,
   };
 
   let allNotes = [];
@@ -88,10 +82,8 @@ describe('Sqlite3 test', () => {
   it('it should update testNote1 and testNote2', (done) => {
     allNotes[0].title = 'updated title1';
     allNotes[0].message = 'updated message1';
-    allNotes[0].modifiedDate = allNotes[0].modified_date;
     allNotes[1].title = 'updated title2';
     allNotes[1].message = 'updated message2';
-    allNotes[1].modifiedDate = allNotes[1].modified_date;
 
     storage.updateNote(allNotes[0].id, allNotes[0])
       .then(() => storage.updateNote(allNotes[1].id, allNotes[1]))

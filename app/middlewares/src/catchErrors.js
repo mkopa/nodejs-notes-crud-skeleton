@@ -7,12 +7,12 @@ const genericError = Object.freeze(new GenericError());
 
 function catchErrors(error, req, res, next) {
   if (error instanceof GenericError) {
-    res.status(error.statusCode).json(error.getError());
+    res.status(error.code).json(error.getError());
   } else {
     Logger.debug('catchErrors - not handled error', error);
     res.status(genericError.statusCode).json(genericError.getError());
   }
-  next(error);
+  next();
 }
 
 module.exports = catchErrors;

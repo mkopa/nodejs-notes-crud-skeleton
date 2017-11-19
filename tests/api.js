@@ -9,7 +9,7 @@ const server = require('../index');
 
 chai.use(chaiHttp);
 
-describe('API test ping pong', () => {
+describe('API ping pong test', () => {
   it('/GET /v1/ping - it should get pong', (done) => {
     chai.request(server)
       .get('/v1/ping')
@@ -22,7 +22,7 @@ describe('API test ping pong', () => {
   });
 });
 
-describe('API test all data is good - positive scenario', () => {
+describe('API insert note test', () => {
   it('/POST /v1/notes - it should save note', (done) => {
     const note = {
       title: 'test title',
@@ -36,8 +36,8 @@ describe('API test all data is good - positive scenario', () => {
         res.body.should.be.a('object');
         res.body.should.have.property('title').eql('test title');
         res.body.should.have.property('message').eql('test message');
-        // res.body.should.have.property('create_date');
-        // res.body.should.have.property('modified_date');
+        // res.body.should.have.property('createdAt');
+        // res.body.should.have.property('modifiedAt');
         done();
       });
   });

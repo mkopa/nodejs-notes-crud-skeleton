@@ -14,6 +14,7 @@ function jsonOk(data, statusCode = HTTPStatus.OK) {
     this.status(statusCode).jsonp(data);
     return;
   }
+
   this.status(HTTPStatus.BAD_REQUEST).json({
     code: HTTPStatus.BAD_REQUEST,
     message: 'Unsuported format',

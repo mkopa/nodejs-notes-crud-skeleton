@@ -4,12 +4,9 @@ const { Storage } = require('../setup/index');
 
 class NotesController {
   static create(req, res, next) {
-    const createTimestamp = Date.now();
     const newNote = {
       title: req.body.title,
       message: req.body.message,
-      createDate: createTimestamp,
-      modifiedDate: createTimestamp,
     };
     Storage.insertNote(newNote)
       .then(createdNote => res.jsonOk(createdNote))

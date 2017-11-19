@@ -5,6 +5,7 @@ const { Logger } = require('./app/setup');
 const express = require('express');
 const bodyParser = require('body-parser');
 const appRouter = require('./app/routers');
+const expressValidator = require('express-validator');
 const { jsonOk, catchErrors } = require('./app/middlewares');
 
 // create application
@@ -13,6 +14,7 @@ const app = express();
 // Connect main middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(expressValidator({ errorFormatter: (param, msg) => `Parameter '${param}' ${msg}` }));
 app.use(jsonOk);
 app.use(appRouter);
 app.use(catchErrors);
