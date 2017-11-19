@@ -1,6 +1,6 @@
 'use strict';
 
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3');
 const { settings } = require('../../configs');
 const Logger = require('../../utils/Logger');
 
@@ -17,14 +17,16 @@ class Sqlite3Storage {
 
   insertNote(note) {
     return new Promise((resolve, reject) => {
-      this.db.run(`INSERT into ${this.tableName}(title, message, create_date, modified_date) VALUES
-        ('${note.title}', '${note.message}', ${note.createDate}, ${note.modifiedDate})`, (err) => {
-        if (err) {
-          reject(err.message);
-          return;
-        }
-        resolve();
-      });
+      const dbWorker = this.db.prepare(`INSERT into ${this.tableName}(title, message, create_date, modified_date) VALUES
+        ('${note.title}', '${note.message}', ${note.createDate}, ${note.modifiedDate})`)
+        .run((err) => {
+          if (err) {
+            reject(err.message);
+            return;
+          }
+          const insertedNote = Object.assign({ id: dbWorker.lastID }, note);
+          resolve(insertedNote);
+        });
     });
   }
 
