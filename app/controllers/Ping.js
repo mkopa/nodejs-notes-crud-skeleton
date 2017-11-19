@@ -2,9 +2,10 @@
 
 class PingController {
   static ping(req, res, next) {
-    res.jsonOk({
+    const pongResponse = {
       pong: true,
-    });
+    };
+    res.jsonOk(pongResponse);
     next();
   }
 }

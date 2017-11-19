@@ -16,6 +16,21 @@ app.use(jsonOk);
 app.use(appRouter);
 app.use(catchErrors);
 
+const { Storage } = require('./app/storage');
+
+const storage = new Storage('notes');
+const createDate = Date.now();
+const modifiedDate = createDate;
+
+const newNote = {
+  title: 'test title',
+  message: 'test message',
+  createDate,
+  modifiedDate,
+};
+
+storage.insertNote(newNote);
+
 // Start server
 app.listen(settings.server.port, () => {
   Logger.log(`Service started on port ${settings.server.port}`);
