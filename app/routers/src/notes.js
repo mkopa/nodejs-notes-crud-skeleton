@@ -16,6 +16,7 @@ router.route('/:id')
   .put((...args) => NotesController.updateNote(...args))
   .get((...args) => NotesValidator.getNote(...args))
   .get((...args) => NotesController.getNote(...args))
+  .delete((...args) => NotesValidator.removeNote(...args))
   .delete((...args) => NotesController.removeNote(...args));
 
 module.exports = router;

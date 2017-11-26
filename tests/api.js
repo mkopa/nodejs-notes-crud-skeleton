@@ -229,6 +229,31 @@ describe('API notes test', () => {
     });
   });
 
+  describe(`/DELETE /v1/notes/${noteId} (Remove note)`, () => {
+    it('it should not remove note (Id is not a number error)', (done) => {
+      chai.request(server)
+        .delete('/v1/notes/20fh')
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('code').eql(400);
+          res.body.should.have.property('message').eql('Id is not a number');
+          done();
+        });
+    });
+
+    it(`it should remove note with id = ${noteId}`, (done) => {
+      chai.request(server)
+        .delete(`/v1/notes/${noteId}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('success').eql(true);
+          done();
+        });
+    });
+  });
+
   afterEach(() => {
     server.close();
   });
