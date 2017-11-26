@@ -185,6 +185,50 @@ describe('API notes test', () => {
     });
   });
 
+  describe(`/PUT /v1/notes/${noteId} (Update note)`, () => {
+    it('it should update note', (done) => {
+      const note = {
+        title: 'updated title',
+        message: 'updated message',
+      };
+      chai.request(server)
+        .put(`/v1/notes/${noteId}`)
+        .send(note)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('id');
+          res.body.should.have.property('title').eql('updated title');
+          res.body.should.have.property('message').eql('updated message');
+          done();
+        });
+    });
+
+    it('it should not update note (Id is not a number error)', (done) => {
+      chai.request(server)
+        .put('/v1/notes/20fh')
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('code').eql(400);
+          res.body.should.have.property('message').eql('Id is not a number');
+          done();
+        });
+    });
+
+    it('it should not update note (Not found error)', (done) => {
+      chai.request(server)
+        .put('/v1/notes/123456789')
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          res.body.should.have.property('code').eql(404);
+          res.body.should.have.property('message').eql('Not found');
+          done();
+        });
+    });
+  });
+
   afterEach(() => {
     server.close();
   });

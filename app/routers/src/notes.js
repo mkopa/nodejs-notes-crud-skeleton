@@ -12,6 +12,7 @@ router.route('/')
   .get((...args) => NotesController.getNotes(...args));
 
 router.route('/:id')
+  .put((...args) => NotesValidator.updateNote(...args))
   .put((...args) => NotesController.updateNote(...args))
   .get((...args) => NotesValidator.getNote(...args))
   .get((...args) => NotesController.getNote(...args))
