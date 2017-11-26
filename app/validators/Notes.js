@@ -14,6 +14,16 @@ class NotesValidator {
     req.sanitizeBody('message').escape();
     return next();
   }
+
+  static getNote(req, res, next) {
+    const errorMessage = 'Id is not a number';
+    req.checkParams('id', errorMessage).isNumeric();
+    const error = req.validationErrors();
+    if (error) {
+      return next(new errors.BadRequestError(errorMessage));
+    }
+    return next();
+  }
 }
 
 module.exports = NotesValidator;

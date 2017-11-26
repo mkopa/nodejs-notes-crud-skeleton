@@ -26,7 +26,7 @@ describe('API ping pong test', () => {
 describe('API notes test', () => {
   let noteId = 0;
 
-  describe('/POST /v1/notes', () => {
+  describe('/POST /v1/notes (Insert new note)', () => {
     it('it should save note', (done) => {
       const note = {
         title: 'test title',
@@ -121,7 +121,7 @@ describe('API notes test', () => {
     });
   });
 
-  describe('/GET /v1/notes', () => {
+  describe('/GET /v1/notes (Read all notes)', () => {
     it('it should read all notes', (done) => {
       chai.request(server)
         .get('/v1/notes')
@@ -144,7 +144,7 @@ describe('API notes test', () => {
     });
   });
 
-  describe(`/GET /v1/notes/${noteId}`, () => {
+  describe(`/GET /v1/notes/${noteId} (Read note with specified Id)`, () => {
     it(`it should read note with id = ${noteId}`, (done) => {
       chai.request(server)
         .get(`/v1/notes/${noteId}`)
@@ -156,6 +156,30 @@ describe('API notes test', () => {
           res.body.should.have.property('message').eql('test message');
           res.body.should.have.property('createdAt');
           res.body.should.have.property('modifiedAt');
+          done();
+        });
+    });
+
+    it('it should not read note (Id is not a number error)', (done) => {
+      chai.request(server)
+        .get('/v1/notes/20fh')
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('code').eql(400);
+          res.body.should.have.property('message').eql('Id is not a number');
+          done();
+        });
+    });
+
+    it('it should not read note (Not found error)', (done) => {
+      chai.request(server)
+        .get('/v1/notes/123456789')
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          res.body.should.have.property('code').eql(404);
+          res.body.should.have.property('message').eql('Not found');
           done();
         });
     });

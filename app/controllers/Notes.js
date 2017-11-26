@@ -1,6 +1,8 @@
 'use strict';
 
 const { Storage } = require('../setup/index');
+const errors = require('../utils/errors');
+
 
 class NotesController {
   static create(req, res, next) {
@@ -28,7 +30,12 @@ class NotesController {
   static getNote(req, res, next) {
     Storage.readNote(req.params.id)
       .then(note => res.jsonOk(note))
-      .catch(error => next(error));
+      .catch((error) => {
+        if (error === 'Note not found') {
+          return next(new errors.NotFoundError());
+        }
+        return next(new errors.InternalServerError(error));
+      });
   }
 
   static removeNote(req, res, next) {
