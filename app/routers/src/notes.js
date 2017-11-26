@@ -13,7 +13,7 @@ router.route('/')
 
 router.route('/:id')
   .put((...args) => NotesController.updateNote(...args))
-  .get((...args) => NotesController.getNotes(...args))
+  .get((...args) => NotesController.getNote(...args))
   .delete((...args) => NotesController.removeNote(...args));
 
 module.exports = router;

@@ -117,4 +117,19 @@ describe('Sqlite3 test', () => {
         done(new Error(error));
       });
   });
+
+  it('it should remove testNote2', (done) => {
+    storage.removeNote(allNotes[1].id)
+      .then(() => storage.readNotes())
+      .then((notes) => {
+        if (notes && notes.length === 0) {
+          done();
+        } else {
+          done(new Error('Error while deleting testNote1'));
+        }
+      })
+      .catch((error) => {
+        done(new Error(error));
+      });
+  });
 });
