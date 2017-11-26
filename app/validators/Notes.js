@@ -15,6 +15,20 @@ class NotesValidator {
     return next();
   }
 
+  static getNotes(req, res, next) {
+    if (req.query.offset !== undefined && req.query.limit !== undefined) {
+      req.checkQuery('offset', `must be a number between 0 - ${Number.MAX_SAFE_INTEGER}`)
+        .isInt({ min: 0, max: Number.MAX_SAFE_INTEGER });
+      req.checkQuery('limit', 'must be a number between 1 - 100')
+        .isInt({ min: 1, max: 100 });
+      const error = req.validationErrors();
+      if (error) {
+        return next(new errors.BadRequestError(error));
+      }
+    }
+    return next();
+  }
+
   static getNote(req, res, next) {
     const errorMessage = 'Id is not a number';
     req.checkParams('id', errorMessage).isNumeric();

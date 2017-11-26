@@ -64,9 +64,13 @@ class Sqlite3Storage {
     });
   }
 
-  readNotes() {
+  readNotes(offset, limit) {
     return new Promise((resolve, reject) => {
-      this.db.all(`SELECT * from ${this.tableName}`, (err, rows) => {
+      let dbQuery = `SELECT * from ${this.tableName}`;
+      if (offset !== undefined && limit !== undefined) {
+        dbQuery += ` LIMIT ${limit} OFFSET ${offset}`;
+      }
+      this.db.all(dbQuery, (err, rows) => {
         if (err) {
           reject(err.message);
           return;

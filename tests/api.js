@@ -7,6 +7,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const randomstring = require('randomstring');
 const server = require('../index');
+const dbMockup = require('../dbMockup.json');
 
 chai.use(chaiHttp);
 
@@ -249,6 +250,87 @@ describe('API notes test', () => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.should.have.property('success').eql(true);
+          done();
+        });
+    });
+  });
+
+  describe('/POST /v1/notes (Pagination test)', () => {
+    it('it should save notes from dbMockup.json', (done) => {
+      const promisedRequests = dbMockup.map(mockup => new Promise((resolve, reject) => {
+        const note = {
+          title: mockup.title,
+          message: mockup.message,
+        };
+        chai.request(server)
+          .post('/v1/notes')
+          .send(note)
+          .end((err, res) => {
+            if (err) {
+              return reject(err);
+            }
+            return resolve(res);
+          });
+      }));
+      Promise.all(promisedRequests)
+        .then(() => done())
+        .catch(err => done(new Error(err)));
+    });
+
+    it('it should read first ten notes', (done) => {
+      chai.request(server)
+        .get('/v1/notes?offset=0&limit=10')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('count');
+          res.body.count.should.be.a('number');
+          res.body.should.have.property('results');
+          res.body.results.should.be.a('array');
+          res.body.results.should.have.length(10);
+          done();
+        });
+    });
+
+    it('it should read last five notes', (done) => {
+      chai.request(server)
+        .get('/v1/notes?offset=45&limit=10')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('count');
+          res.body.count.should.be.a('number');
+          res.body.should.have.property('results');
+          res.body.results.should.be.a('array');
+          res.body.results.should.have.length(5);
+          done();
+        });
+    });
+
+    it('it should not read any notes (Parameter \'offset\' must be a number between 1 - 9007199254740991 error)', (done) => {
+      chai.request(server)
+        .get('/v1/notes?offset=45err&limit=10')
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('code').eql(400);
+          res.body.should.have.property('message');
+          res.body.message.should.be.a('array');
+          res.body.message.should.have.length(1);
+          done();
+        });
+    });
+
+    it('it should not read any notes (Parameter \'limit\' must be a number between 1 - 100 error)', (done) => {
+      chai.request(server)
+        .get('/v1/notes?offset=45&limit=10err')
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('code').eql(400);
+          res.body.should.have.property('message');
+          res.body.message.should.be.a('array');
+          res.body.message.should.have.length(1);
           done();
         });
     });

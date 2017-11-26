@@ -16,7 +16,7 @@ class NotesController {
   }
 
   static getNotes(req, res, next) {
-    Storage.readNotes()
+    Storage.readNotes(req.query.offset, req.query.limit)
       .then((notes) => {
         const allNotes = {
           count: notes.length,

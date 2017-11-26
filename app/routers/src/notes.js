@@ -9,6 +9,7 @@ const router = new Router();
 router.route('/')
   .post((...args) => NotesValidator.create(...args))
   .post((...args) => NotesController.create(...args))
+  .get((...args) => NotesValidator.getNotes(...args))
   .get((...args) => NotesController.getNotes(...args));
 
 router.route('/:id')
